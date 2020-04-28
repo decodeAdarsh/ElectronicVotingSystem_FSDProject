@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.34)
-# Date: 2020-04-27 22:59:54
+# Date: 2020-04-28 23:13:28
 # Generator: MySQL-Front 5.3  (Build 3.22)
 
 /*!40101 SET NAMES utf8 */;
@@ -70,15 +70,16 @@ CREATE TABLE `evs_tbl_candidate` (
 #
 
 CREATE TABLE `evs_tbl_result` (
-  `serialno` decimal(6,0) unsigned NOT NULL DEFAULT '0',
+  `serialno` int(6) unsigned NOT NULL DEFAULT '0',
   `electionid` varchar(6) NOT NULL DEFAULT '',
   `candidateid` varchar(6) NOT NULL DEFAULT '',
-  `votecount` decimal(5,0) unsigned DEFAULT NULL,
+  `votecount` int(5) unsigned DEFAULT NULL,
+  `resultstatus` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`serialno`),
   KEY `evs_tbl_result_fk` (`candidateid`),
   KEY `evs_tbl_result_fk_1` (`electionid`),
-  CONSTRAINT `evs_tbl_result_fk_1` FOREIGN KEY (`electionid`) REFERENCES `evs_tbl_election` (`electionid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `evs_tbl_result_fk` FOREIGN KEY (`candidateid`) REFERENCES `evs_tbl_candidate` (`candidateid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `evs_tbl_result_fk` FOREIGN KEY (`candidateid`) REFERENCES `evs_tbl_candidate` (`candidateid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `evs_tbl_result_fk_1` FOREIGN KEY (`electionid`) REFERENCES `evs_tbl_election` (`electionid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 #
@@ -89,7 +90,7 @@ CREATE TABLE `evs_tbl_user_credentials` (
   `userid` varchar(6) NOT NULL DEFAULT '',
   `password` varchar(20) NOT NULL DEFAULT '',
   `usertype` varchar(1) NOT NULL DEFAULT '',
-  `loginstatus` decimal(1,0) unsigned DEFAULT NULL,
+  `loginstatus` int(1) unsigned DEFAULT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -100,8 +101,8 @@ CREATE TABLE `evs_tbl_user_credentials` (
 CREATE TABLE `evs_tbl_application` (
   `userid` varchar(6) NOT NULL DEFAULT '',
   `consituency` varchar(20) NOT NULL DEFAULT '',
-  `passedstatus` decimal(2,0) unsigned NOT NULL DEFAULT '0',
-  `aprrovedstatus` decimal(2,0) unsigned NOT NULL DEFAULT '0',
+  `passedstatus` int(2) unsigned NOT NULL DEFAULT '0',
+  `aprrovedstatus` int(2) unsigned NOT NULL DEFAULT '0',
   `voterid` varchar(8) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   CONSTRAINT `evs_tbl_application_fk` FOREIGN KEY (`userid`) REFERENCES `evs_tbl_user_credentials` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -133,13 +134,13 @@ CREATE TABLE `evs_tbl_user_profile` (
 #
 
 CREATE TABLE `evs_tbl_voter_details` (
-  `serialno` decimal(6,0) unsigned NOT NULL DEFAULT '0',
+  `serialno` int(6) unsigned NOT NULL DEFAULT '0',
   `candidateid` varchar(6) NOT NULL DEFAULT '',
   `electionid` varchar(6) NOT NULL DEFAULT '',
   `voterid` varchar(8) NOT NULL DEFAULT '',
   PRIMARY KEY (`serialno`),
   KEY `evs_tbl_voter_details_fk` (`electionid`),
   KEY `evs_tbl_voter_details_fk_1` (`candidateid`),
-  CONSTRAINT `evs_tbl_voter_details_fk_1` FOREIGN KEY (`candidateid`) REFERENCES `evs_tbl_candidate` (`candidateid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `evs_tbl_voter_details_fk` FOREIGN KEY (`electionid`) REFERENCES `evs_tbl_election` (`electionid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `evs_tbl_voter_details_fk` FOREIGN KEY (`electionid`) REFERENCES `evs_tbl_election` (`electionid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `evs_tbl_voter_details_fk_1` FOREIGN KEY (`candidateid`) REFERENCES `evs_tbl_candidate` (`candidateid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
