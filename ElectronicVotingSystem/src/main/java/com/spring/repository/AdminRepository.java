@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.entity.ElectionEntity;
 
+
 @Repository
 public interface AdminRepository extends JpaRepository<ElectionEntity, String> {
+
+	
 
 }

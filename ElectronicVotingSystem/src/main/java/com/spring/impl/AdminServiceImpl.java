@@ -1,6 +1,7 @@
 package com.spring.impl;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,19 +10,26 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.spring.entity.ElectionEntity;
+import com.spring.entity.PartyEntity;
 import com.spring.entity.UserCredentialsEntity;
+import com.spring.entity.UserEntity;
+
 import com.spring.json.LoginResponse;
 import com.spring.json.UserCredentials;
 import com.spring.repository.AdminRepository;
+import com.spring.repository.PartyRepository;
 import com.spring.repository.UserCredentialsRepository;
 import com.spring.service.AdminService;
+
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminRepository adminRepository;
+	private PartyRepository partyRepository;
 
 	@Autowired
 	private UserCredentialsRepository userCredentialsRepository;
@@ -51,6 +59,11 @@ public class AdminServiceImpl implements AdminService {
 		List<ElectionEntity> electionList = new ArrayList<>();
 		adminRepository.findAll().forEach(electionList::add);
 		return electionList;
+	}
+	public List<PartyEntity> getPartyDetails() {
+		List<PartyEntity> partyList = new ArrayList<>();
+		partyRepository.findAll().forEach(partyList::add);
+		return partyList;
 	}
 
 	@Override
@@ -97,4 +110,17 @@ public class AdminServiceImpl implements AdminService {
 		return response;
 	}
 
-}
+	@Override
+	public void addParty(PartyEntity party) {
+		// TODO Auto-generated method stub
+		String id = generateRandomString(6);
+		party.setPartyid(id);
+		partyRepository.save(party);
+		
+				
+		}
+
+		
+	}
+
+
