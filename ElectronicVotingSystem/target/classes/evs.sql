@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.34)
-# Date: 2020-04-28 23:13:28
+# Date: 2020-04-30 03:13:15
 # Generator: MySQL-Front 5.3  (Build 3.22)
 
 /*!40101 SET NAMES utf8 */;
@@ -125,6 +125,7 @@ CREATE TABLE `evs_tbl_user_profile` (
   `pincode` varchar(10) NOT NULL DEFAULT '',
   `mobileno` varchar(10) NOT NULL DEFAULT '',
   `emailid` varchar(30) NOT NULL DEFAULT '',
+  `type` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`),
   CONSTRAINT `evs_tbl_user_profile_fk` FOREIGN KEY (`userid`) REFERENCES `evs_tbl_user_credentials` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

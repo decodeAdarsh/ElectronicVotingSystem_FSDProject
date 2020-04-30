@@ -1,6 +1,5 @@
 package com.spring.service;
 
-import java.util.List;
 
 import com.spring.entity.ElectionEntity;
 import com.spring.json.LoginResponse;
@@ -8,9 +7,9 @@ import com.spring.json.UserCredentials;
 
 public interface AdminService {
 
-	void addElection(ElectionEntity election);
+	Object addElection(ElectionEntity election, String sessionId);
 
-	List<ElectionEntity> getElectionDetails();
+	Object getElectionDetails(String sessionId);
 
 	LoginResponse adminLogin(UserCredentials userCredentials);
 

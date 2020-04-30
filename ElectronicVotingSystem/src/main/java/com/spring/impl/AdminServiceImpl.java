@@ -26,11 +26,41 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private UserCredentialsRepository userCredentialsRepository;
 
-	public void addElection(ElectionEntity election) {
-		String id = generateRandomString(6);
-		election.setElectionid(id);
-		adminRepository.save(election);
+	public Object addElection(ElectionEntity election, String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+			String id = generateRandomString(6);
+			election.setElectionid(id);
+			adminRepository.save(election);
+			return election;
+		}
+		else {
+		 LoginResponse loginResponse=new LoginResponse();
+		 loginResponse.setMessage("INVALID SESSION ID");
+		 loginResponse.setResult("unsucessfull");
+		 loginResponse.setSessionId(null);
+		 return loginResponse;
+		}
+		
 	}
+	
+	
+	public Object getElectionDetails(String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+			List<ElectionEntity> electionList = new ArrayList<>();
+			adminRepository.findAll().forEach(electionList::add);
+			return electionList;
+		}
+		else {
+			LoginResponse loginResponse=new LoginResponse();
+			 loginResponse.setMessage("INVALID SESSION ID");
+			 loginResponse.setResult("unsucessfull");
+			 loginResponse.setSessionId(null);
+			 return loginResponse;
+		}
+	}
+	
 
 	private final Random random = new SecureRandom();
 	private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -47,12 +77,8 @@ public class AdminServiceImpl implements AdminService {
 		return stringBuilder.toString();
 	}
 
-	public List<ElectionEntity> getElectionDetails() {
-		List<ElectionEntity> electionList = new ArrayList<>();
-		adminRepository.findAll().forEach(electionList::add);
-		return electionList;
-	}
-
+	
+//bug : 
 	@Override
 	public LoginResponse adminLogin(UserCredentials user) {
 		UserCredentials newUser = new UserCredentials();
@@ -61,17 +87,36 @@ public class AdminServiceImpl implements AdminService {
 		String sessionId = null;
 		LoginResponse response = new LoginResponse();
 		if (newUser.getUserid().equals(user.getUserid()) && newUser.getPassword().equals(user.getPassword())
-				&& user.getUsertype().equals("1")) {
-//			UserCredentialsEntity
+				&& user.getUsertype().equals("1") && newUser.getUsertype().equals("1")) {
 			sessionId = generateRandomString(6);
 			userCredentialsEntity.setSessionId(sessionId);
 			userCredentialsEntity.setLoginStatus(1);
 			userCredentialsRepository.save(userCredentialsEntity);
-			response.setMessage("Login Successful");
+			response.setMessage("Login Successful-admin");
 			response.setResult("Success");
 			response.setSessionId(sessionId);
 
-		} else {
+		} else if (newUser.getUserid().equals(user.getUserid()) && newUser.getPassword().equals(user.getPassword())
+				&& user.getUsertype().equals("2")  && newUser.getUsertype().equals("2")) {
+			sessionId = generateRandomString(6);
+			userCredentialsEntity.setSessionId(sessionId);
+			userCredentialsEntity.setLoginStatus(1);
+			userCredentialsRepository.save(userCredentialsEntity);
+			response.setMessage("Login Successful-electoral");
+			response.setResult("Success");
+			response.setSessionId(sessionId);
+
+		}else if (newUser.getUserid().equals(user.getUserid()) && newUser.getPassword().equals(user.getPassword())
+				&& user.getUsertype().equals("3")  && newUser.getUsertype().equals("3")) {
+			sessionId = generateRandomString(6);
+			userCredentialsEntity.setSessionId(sessionId);
+			userCredentialsEntity.setLoginStatus(1);
+			userCredentialsRepository.save(userCredentialsEntity);
+			response.setMessage("Login Successful-voter");
+			response.setResult("Success");
+			response.setSessionId(sessionId);
+
+		}else {
 			response.setMessage("Login UnSuccessful");
 			response.setResult("Failure");
 			response.setSessionId(null);
@@ -86,8 +131,8 @@ public class AdminServiceImpl implements AdminService {
 			response.setMessage("INVALID SESSIONID");
 		} else {
 			UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
-			System.out.println(
-					"===========================================================================>" + sessionId);
+			//System.out.println(
+			//		"===========================================================================>" + sessionId);
 			userCredentialsEntity.setSessionId(null);
 			userCredentialsEntity.setLoginStatus(0);
 

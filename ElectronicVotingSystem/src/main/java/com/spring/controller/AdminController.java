@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,18 +28,18 @@ public class AdminController {
 	private String sessionId = null;
 
 	@PostMapping("/election")
-	public ElectionEntity addElectionDetails(@RequestBody Election election, ElectionEntity electionEntity) {
+	public Object addElectionDetails(@RequestBody Election election, ElectionEntity electionEntity, @RequestHeader(name = "sessionId") String sessionId) {
 		BeanUtils.copyProperties(election, electionEntity);
-		adminService.addElection(electionEntity);
-		return electionEntity;
+		return adminService.addElection(electionEntity,sessionId);
+	//	return electionEntity;
 	}
 
 	@GetMapping("/election")
-	public List<ElectionEntity> getElectionDetails() {
-		return adminService.getElectionDetails();
+	public Object getElectionDetails(@RequestHeader(name = "sessionId") String sessionId) {
+		return adminService.getElectionDetails(sessionId);
 	}
 
-	@PostMapping("/admin/login")
+	@PostMapping("/login")
 	public LoginResponse loginAdmin(@RequestBody UserCredentials userCredentials,
 			UserCredentialsEntity userCredentialsEntity) {
 		LoginResponse res = adminService.adminLogin(userCredentials);
@@ -46,7 +47,7 @@ public class AdminController {
 		return res;
 	}
 
-	@GetMapping("/admin/logout")
+	@GetMapping("/logout")
 	public LoginResponse logoutAdmin() {
 		return adminService.adminLogout(sessionId);
 	}
