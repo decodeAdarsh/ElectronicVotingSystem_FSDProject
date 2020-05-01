@@ -4,7 +4,7 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         url: jdbc:mysql://localhost:3306/evs?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
         username: root
-        password: root
+        password: adi123
 
     jpa:
         generate-ddl: true
