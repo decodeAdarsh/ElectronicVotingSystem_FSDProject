@@ -238,14 +238,14 @@ public class AdminServiceImpl implements AdminService {
 				return null;
 		}
 
-
+//
 		@Override
 		public Object update(String candidateid, Result result, String sessionId) {
 			UserCredentialsEntity userCred=userCredentialsRepository.findBySessionId(sessionId);
 			if(userCred!=null)
 			{
 				ResultEntity resultEnt=resultRepository.findByCandidateid(candidateid);
-				if(resultEnt!=null) {
+				if(resultEnt!=null) { 
 					resultEnt.setElectionid(result.getElectionid());
 					resultEnt.setCandidateid(result.getCandidateid());
 					resultEnt.setVotecount(result.getVotecount());
