@@ -37,10 +37,10 @@ public class AdminController {
 	//	return electionEntity;
 	}
 	@PostMapping(value="/party", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public PartyEntity  addPartyDetails(@RequestBody Party party,PartyEntity partyEntity)
-	{ BeanUtils.copyProperties(party, partyEntity);
-		 adminService.addParty(partyEntity);
-		return partyEntity;
+	public Object  addPartyDetails(@RequestBody Party party,PartyEntity partyEntity,@RequestHeader(name="sessionId") String sessionId){
+	 BeanUtils.copyProperties(party, partyEntity);
+		return adminService.addParty(partyEntity,sessionId);
+		
 	}
 	
 	
@@ -53,8 +53,8 @@ public class AdminController {
 	}
 	
 	@GetMapping(value="/party")
-		public List<PartyEntity> getPartyDetails(){
-			return adminService.getPartyDetails();
+		public Object getPartyDetails(@RequestHeader(name="sessionId") String sessionId){
+			return adminService.getPartyDetails(sessionId);
 		}
 		
 	

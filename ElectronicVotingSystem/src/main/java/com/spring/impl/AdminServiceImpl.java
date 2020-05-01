@@ -51,6 +51,23 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 	}
+	@Override
+	public Object addParty(PartyEntity party, String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+		String id = generateRandomString(6);
+		party.setPartyid(id);
+		partyRepository.save(party);
+		return party;
+		}
+		else {
+		 LoginResponse loginResponse=new LoginResponse();
+		 loginResponse.setMessage("INVALID SESSION ID");
+		 loginResponse.setResult("unsucessfull");
+		 loginResponse.setSessionId(null);
+		 return loginResponse;
+		}			
+		}
 	
 	
 	public Object getElectionDetails(String sessionId) {
@@ -69,6 +86,21 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 	
+	public Object getPartyDetails(String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+		List<PartyEntity> partyList = new ArrayList<>();
+		partyRepository.findAll().forEach(partyList::add);
+		return partyList;
+		}
+		else {
+			LoginResponse loginResponse=new LoginResponse();
+			 loginResponse.setMessage("INVALID SESSION ID");
+			 loginResponse.setResult("unsucessfull");
+			 loginResponse.setSessionId(null);
+			 return loginResponse;
+		}
+	}
 
 	private final Random random = new SecureRandom();
 	private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -85,22 +117,15 @@ public class AdminServiceImpl implements AdminService {
 		return stringBuilder.toString();
 	}
 
-<<<<<<< HEAD
-	
-//bug : 
-=======
+
 	public List<ElectionEntity> getElectionDetails() {
 		List<ElectionEntity> electionList = new ArrayList<>();
 		adminRepository.findAll().forEach(electionList::add);
 		return electionList;
 	}
-	public List<PartyEntity> getPartyDetails() {
-		List<PartyEntity> partyList = new ArrayList<>();
-		partyRepository.findAll().forEach(partyList::add);
-		return partyList;
-	}
 
->>>>>>> ecce20713aa91de953a1906594bb7e1fddf2e95e
+
+
 	@Override
 	public LoginResponse adminLogin(UserCredentials user) {
 		UserCredentials newUser = new UserCredentials();
@@ -164,15 +189,7 @@ public class AdminServiceImpl implements AdminService {
 		return response;
 	}
 
-	@Override
-	public void addParty(PartyEntity party) {
-		// TODO Auto-generated method stub
-		String id = generateRandomString(6);
-		party.setPartyid(id);
-		partyRepository.save(party);
-		
-				
-		}
+	
 
 		
 	}

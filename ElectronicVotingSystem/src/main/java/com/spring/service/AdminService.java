@@ -16,8 +16,8 @@ public interface AdminService {
 
 	LoginResponse adminLogout(String sessionId);
 	
-	void addParty(PartyEntity party);
+	Object addParty(PartyEntity party, String sessionId);
 	
-	List<PartyEntity> getPartyDetails();
+	Object getPartyDetails(String sessionId);
 
 }
