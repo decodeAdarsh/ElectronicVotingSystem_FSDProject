@@ -2,14 +2,16 @@ package com.spring.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "evs_tbl_party")
 public class PartyEntity {
-	@Column(name = "electionid", length = 6)
+	
 	@Id
+	@GeneratedValue
 	private String partyid;
 	
 	@Column(name = "name")
@@ -59,6 +61,11 @@ public class PartyEntity {
 		this.name = name;
 		this.leader = leader;
 		this.symbol = symbol;
+	}
+	
+
+	public PartyEntity() {
+		super();
 	}
 
 	public PartyEntity(String name, String leader, String symbol) {

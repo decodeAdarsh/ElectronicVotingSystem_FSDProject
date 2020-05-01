@@ -40,7 +40,7 @@ public class AdminController {
 		return adminService.addElection(electionEntity,sessionId);
 	//	return electionEntity;
 	}
-	@PostMapping(value="/party", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/party")
 	public Object  addPartyDetails(@RequestBody Party party,PartyEntity partyEntity,@RequestHeader(name="sessionId") String sessionId){
 	 BeanUtils.copyProperties(party, partyEntity);
 		return adminService.addParty(partyEntity,sessionId);

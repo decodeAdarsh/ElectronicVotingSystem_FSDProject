@@ -42,6 +42,10 @@ public class Party {
 		this.leader = leader;
 		this.symbol = symbol;
 	}
+	
+	public Party() {
+		super();
+	}
 	@Override
 	public String toString() {
 		return "Party [partyid=" + partyid + ", name=" + name + ", leader=" + leader + ", symbol=" + symbol + "]";
