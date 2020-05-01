@@ -15,13 +15,14 @@ import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
 import com.spring.entity.UserCredentialsEntity;
 import com.spring.entity.UserEntity;
-
+import com.spring.json.Election;
 import com.spring.json.LoginResponse;
 import com.spring.json.UserCredentials;
 import com.spring.repository.AdminRepository;
 import com.spring.repository.PartyRepository;
 import com.spring.repository.UserCredentialsRepository;
 import com.spring.service.AdminService;
+
 
 
 @Service
@@ -101,6 +102,24 @@ public class AdminServiceImpl implements AdminService {
 			 return loginResponse;
 		}
 	}
+	
+	@Override
+	public Object getAllElectionFromElectionDate(LocalDate date,String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+		List<ElectionEntity> electionDateList = new ArrayList<>();
+		adminRepository.findByDateGreaterThanEqual(date).forEach(electionDateList::add);
+		return electionDateList;
+		}
+		else {
+			LoginResponse loginResponse=new LoginResponse();
+			 loginResponse.setMessage("INVALID SESSION ID");
+			 loginResponse.setResult("unsucessfull");
+			 loginResponse.setSessionId(null);
+			 return  loginResponse;
+		}
+	}
+		
 
 	private final Random random = new SecureRandom();
 	private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

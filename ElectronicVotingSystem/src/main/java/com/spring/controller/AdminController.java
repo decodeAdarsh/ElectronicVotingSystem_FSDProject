@@ -1,11 +1,15 @@
 package com.spring.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +60,12 @@ public class AdminController {
 		public Object getPartyDetails(@RequestHeader(name="sessionId") String sessionId){
 			return adminService.getPartyDetails(sessionId);
 		}
+	
+	@GetMapping("/advertise/fromDate/{date}")
+	public Object getElectionFromDate(@PathVariable(value="date") @DateTimeFormat(iso = ISO.DATE) LocalDate date,@RequestHeader(name="sessionId") String sessionId)
+	{
+		return adminService.getAllElectionFromElectionDate( date, sessionId);
+	}
 		
 	
 
