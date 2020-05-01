@@ -11,7 +11,7 @@ import com.spring.json.Application;
 import com.spring.json.User;
 import com.spring.repository.ApplicationRepository;
 import com.spring.repository.ElectoralRepository;
-import com.spring.utils.UserUtils;
+import com.spring.service.ElectoralServices;
 
 @Service
 public class ElectoralServiceImpl implements ElectoralServices {
