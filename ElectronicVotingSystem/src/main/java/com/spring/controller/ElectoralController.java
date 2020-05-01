@@ -16,7 +16,6 @@ import com.spring.entity.UserEntity;
 import com.spring.impl.AdminServiceImpl;
 import com.spring.json.Application;
 import com.spring.json.User;
-import com.spring.service.ElectoralServiceImpl;
 import com.spring.service.ElectoralServices;
 
 @RestController
@@ -24,7 +23,7 @@ import com.spring.service.ElectoralServices;
 public class ElectoralController {
 
 		@Autowired
-		private ElectoralServiceImpl services;
+		private com.spring.impl.ElectoralServiceImpl services;
 		private  UserServiceImpl user;
 		private AdminServiceImpl admin;
 		
