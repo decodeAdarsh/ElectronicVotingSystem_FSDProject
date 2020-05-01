@@ -2,7 +2,7 @@ package com.spring.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class PartyEntity {
 	
 	@Id
-	@GeneratedValue
+	
 	private String partyid;
 	
 	@Column(name = "name")
