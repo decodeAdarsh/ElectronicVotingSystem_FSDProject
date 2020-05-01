@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
+import com.spring.entity.ResultEntity;
 import com.spring.entity.UserCredentialsEntity;
 import com.spring.json.Election;
 import com.spring.json.LoginResponse;
 import com.spring.json.Party;
+import com.spring.json.Result;
 import com.spring.json.UserCredentials;
 import com.spring.service.AdminService;
 
@@ -80,5 +84,19 @@ public class AdminController {
 	public LoginResponse logoutAdmin() {
 		return adminService.adminLogout(sessionId);
 	}
+	
+	//from ad 009
+		@GetMapping(value="party/candidate/{name}")
+		public List<String> detailsByParty(@PathVariable(name="name") String partyName,@RequestHeader(name="sessionId") String sessionId){
+			return adminService.candidatesByParty(partyName,sessionId);	
+		}
+		
+		@PutMapping(value="/election/results/approval{candidateId}",produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+		public Object resultStatus(@PathVariable(value="candidateId") String candidateid,@RequestBody Result result,ResultEntity resultEntity,@RequestHeader(name="sessionId") String sessionId) {
+			
+			return adminService.update(candidateid,result,sessionId);
+			
+		}
+		
 
 }

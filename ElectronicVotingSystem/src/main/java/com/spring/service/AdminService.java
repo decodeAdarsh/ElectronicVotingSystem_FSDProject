@@ -7,6 +7,7 @@ import java.util.List;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
 import com.spring.json.LoginResponse;
+import com.spring.json.Result;
 import com.spring.json.UserCredentials;
 
 public interface AdminService {
@@ -24,5 +25,12 @@ public interface AdminService {
 	Object getPartyDetails(String sessionId);
 	
 	Object getAllElectionFromElectionDate(LocalDate date,String sessionId);
+	
+	//ad 009
+
+	List<String> candidatesByParty(String partyName,String sessionId);
+
+	Object update(String candidateid, Result result, String sessionId);
+
 
 }
