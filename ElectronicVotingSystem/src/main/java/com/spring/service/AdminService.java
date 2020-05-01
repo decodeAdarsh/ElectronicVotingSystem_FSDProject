@@ -23,6 +23,6 @@ public interface AdminService {
 	
 	Object getPartyDetails(String sessionId);
 	
-	//Object getAllElectionFromElectionDate(El date,String sessionId);
+	Object getAllElectionFromElectionDate(LocalDate date,String sessionId);
 
 }

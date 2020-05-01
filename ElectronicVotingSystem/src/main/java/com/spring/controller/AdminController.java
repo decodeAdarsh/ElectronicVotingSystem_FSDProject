@@ -61,12 +61,11 @@ public class AdminController {
 			return adminService.getPartyDetails(sessionId);
 		}
 	
-		/*
-		 * @GetMapping("/advertise/fromDate/{date}") public Object
-		 * getElectionFromDate(@PathVariable(value="date") @DateTimeFormat(iso =
-		 * ISO.DATE) LocalDate date,@RequestHeader(name="sessionId") String sessionId) {
-		 * return adminService.getAllElectionFromElectionDate( date, sessionId); }
-		 */
+		
+		  @GetMapping("/election/fromDate/{date}")
+		  public Object getElectionFromElectionDate(@PathVariable(value="date") @DateTimeFormat(iso = ISO.DATE) LocalDate date,@RequestHeader(name="sessionId") String sessionId) {
+		  return adminService.getAllElectionFromElectionDate( date, sessionId); }
+		 
 	
 
 	@PostMapping("/login")

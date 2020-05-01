@@ -103,18 +103,18 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 	
-	/*
-	 * @Override public Object getAllElectionFromElectionDate(LocalDate date,String
-	 * sessionId) { UserCredentialsEntity userCredentialsEntity =
-	 * userCredentialsRepository.findBySessionId(sessionId);
-	 * if(userCredentialsEntity != null) { List<ElectionEntity> electionDateList =
-	 * new ArrayList<>();
-	 * adminRepository.findByDateGreaterThanEqual(date).forEach(electionDateList::
-	 * add); return electionDateList; } else { LoginResponse loginResponse=new
-	 * LoginResponse(); loginResponse.setMessage("INVALID SESSION ID");
-	 * loginResponse.setResult("unsucessfull"); loginResponse.setSessionId(null);
-	 * return loginResponse; } }
-	 */
+	
+	  @Override 
+	  public Object getAllElectionFromElectionDate(LocalDate date,String sessionId) {
+	 UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+	  if(userCredentialsEntity != null) { 
+		  List<ElectionEntity> electionDateList = new ArrayList<>();
+	  adminRepository.findByElectionDateGreaterThanEqual(date).forEach(electionDateList::
+	  add); return electionDateList; } else { LoginResponse loginResponse=new
+	  LoginResponse(); loginResponse.setMessage("INVALID SESSION ID");
+	  loginResponse.setResult("unsucessfull"); loginResponse.setSessionId(null);
+	  return loginResponse; } }
+	 
 		
 
 	private final Random random = new SecureRandom();
