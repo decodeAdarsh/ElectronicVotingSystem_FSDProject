@@ -10,19 +10,22 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.spring.entity.ApplicationEntity;
+import com.spring.entity.CandidateEntity;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
 import com.spring.entity.UserCredentialsEntity;
 import com.spring.entity.UserEntity;
-import com.spring.json.Election;
+
 import com.spring.json.LoginResponse;
 import com.spring.json.UserCredentials;
 import com.spring.repository.AdminRepository;
+import com.spring.repository.ApplicationRepository;
+import com.spring.repository.CandidateRepository;
 import com.spring.repository.PartyRepository;
 import com.spring.repository.UserCredentialsRepository;
-import com.spring.service.AdminService;
 
+import com.spring.service.AdminService;
 
 
 @Service
@@ -31,8 +34,15 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminRepository adminRepository;
 	
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
+	
 	@Autowired
 	private PartyRepository partyRepository;
+	
+	@Autowired
+	private CandidateRepository candidateRepository;
 
 	@Autowired
 	private UserCredentialsRepository userCredentialsRepository;
@@ -54,23 +64,6 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 	}
-	@Override
-	public Object addParty(PartyEntity party, String sessionId) {
-		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
-		if(userCredentialsEntity != null) {
-		String id = generateRandomString(6);
-		party.setPartyid(id);
-		partyRepository.save(party);
-		return party;
-		}
-		else {
-		 LoginResponse loginResponse=new LoginResponse();
-		 loginResponse.setMessage("INVALID SESSION ID");
-		 loginResponse.setResult("unsucessfull");
-		 loginResponse.setSessionId(null);
-		 return loginResponse;
-		}			
-		}
 	
 	
 	public Object getElectionDetails(String sessionId) {
@@ -89,35 +82,6 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 	
-	public Object getPartyDetails(String sessionId) {
-		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
-		if(userCredentialsEntity != null) {
-		List<PartyEntity> partyList = new ArrayList<>();
-		partyRepository.findAll().forEach(partyList::add);
-		return partyList;
-		}
-		else {
-			LoginResponse loginResponse=new LoginResponse();
-			 loginResponse.setMessage("INVALID SESSION ID");
-			 loginResponse.setResult("unsucessfull");
-			 loginResponse.setSessionId(null);
-			 return loginResponse;
-		}
-	}
-	
-	
-	  @Override 
-	  public Object getAllElectionFromElectionDate(LocalDate date,String sessionId) {
-	 UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
-	  if(userCredentialsEntity != null) { 
-		  List<ElectionEntity> electionDateList = new ArrayList<>();
-	  adminRepository.findByElectionDateGreaterThanEqual(date).forEach(electionDateList::
-	  add); return electionDateList; } else { LoginResponse loginResponse=new
-	  LoginResponse(); loginResponse.setMessage("INVALID SESSION ID");
-	  loginResponse.setResult("unsucessfull"); loginResponse.setSessionId(null);
-	  return loginResponse; } }
-	 
-		
 
 	private final Random random = new SecureRandom();
 	private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -140,7 +104,8 @@ public class AdminServiceImpl implements AdminService {
 		adminRepository.findAll().forEach(electionList::add);
 		return electionList;
 	}
-
+	
+	
 
 
 	@Override
@@ -206,9 +171,127 @@ public class AdminServiceImpl implements AdminService {
 		return response;
 	}
 
+	@Override
+	public Object addParty(PartyEntity party, String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+		String id = generateRandomString(6);
+		party.setPartyid(id);
+		partyRepository.save(party);
+		return party;
+		}
+		else {
+		 LoginResponse loginResponse=new LoginResponse();
+		 loginResponse.setMessage("INVALID SESSION ID");
+		 loginResponse.setResult("unsucessfull");
+		 loginResponse.setSessionId(null);
+		 return loginResponse;
+		}			
+		}
+
+
 	
 
+
+	@Override
+	public Object addCandidate(CandidateEntity candidate, String sessionId,String electionid ) {
+		
+			UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+	
+			ElectionEntity electionEntity=adminRepository.findByElectionid(electionid);
+			if(userCredentialsEntity != null) {
+				String id = generateRandomString(6);
+				candidate.setCandidateId(id);
+				candidateRepository.save(candidate);
+				return candidate;
+			}
+			else {
+			 LoginResponse loginResponse=new LoginResponse();
+			 loginResponse.setMessage("INVALID SESSION ID");
+			 loginResponse.setResult("unsucessfull");
+			 loginResponse.setSessionId(null);
+			 return loginResponse;
+			}
+
+	}
+
+
+	@Override
+	public Object getCandidateDetails(String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+	//ElectionEntity electionEntity=adminRepository.findByElectionid(electionid);
+		if(userCredentialsEntity != null) {
+			List<CandidateEntity> candidateList = new ArrayList<>();
+			candidateRepository.findAll().forEach(candidateList::add);
+			return candidateList;
+		}
+		else {
+			LoginResponse loginResponse=new LoginResponse();
+			 loginResponse.setMessage("INVALID SESSION ID");
+			 loginResponse.setResult("unsucessfull");
+			 loginResponse.setSessionId(null);
+			 return loginResponse;
+	}
+
+	}
+
+	
+	
+	
+
+	@Override
+	public List<PartyEntity> getPartyDetails(String sessionId) {
+	
+			List<PartyEntity> partyList = new ArrayList<>();
+			partyRepository.findAll().forEach(partyList::add);
+			return partyList;
 		
 	}
+
+
+
+	@Override
+	public Object  updateRequest(ApplicationEntity applicationEntity,String sessionId,String userid) {
+		
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.
+				findBySessionId(sessionId);
+		
+		
+		if(userCredentialsEntity != null) {
+			ApplicationEntity app=applicationRepository.findByUserid(userid);
+			if(app!=null) {
+		    app.setApprovedstatus(app.getApprovedstatus());
+		    app.setPassedstatus(app.getPassedstatus());
+		    app.setConstituency(app.getConstituency());
+		    applicationRepository.save(app);
+		    return app;
+			}
+			else
+				return "{\"result\": \"failure\",\"message\": \"Wrong User Id\"}";
+		}
+		else 
+		{
+		
+			return "{\"result\": \"failure\",\"message\": \"Wrong Session Id\"}";
+	}
+
+
+}
+	@Override
+	public List<ApplicationEntity>  getRequest(String sessionId) {
+		
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.
+				findBySessionId(sessionId);
+		
+		
+		if(userCredentialsEntity != null) {
+		
+	
+		return applicationRepository.findByApprovedstatus(0);
+			
+		}
+return null;
+}
+}
 
 
