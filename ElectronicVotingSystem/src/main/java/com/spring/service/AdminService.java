@@ -33,7 +33,7 @@ public interface AdminService {
 
 	List<ApplicationEntity> getRequest(String sessionId);
 	
-	List<String> candidatesByParty(String partyName);
+	List<String> candidatesByParty(String partyName,String sessionid);
 
 	Object update(String candidateid, ResultEntity result, String sessionId);
 

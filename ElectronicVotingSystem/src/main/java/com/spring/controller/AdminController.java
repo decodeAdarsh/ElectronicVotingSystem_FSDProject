@@ -108,8 +108,8 @@ public class AdminController {
 	}
 	
 	@GetMapping(value="party/candidate/{name}")
-	public List<String> detailsByParty(@PathVariable(name="name") String partyName){
-		return adminService.candidatesByParty(partyName);	
+	public List<String> detailsByParty(@PathVariable(name="name") String partyName ,@RequestHeader(name="sessionId") String sessionId){
+		return adminService.candidatesByParty(partyName,sessionId);	
 	}
 	
 	@PutMapping(value="/election/results/approval/{candidateId}",produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)

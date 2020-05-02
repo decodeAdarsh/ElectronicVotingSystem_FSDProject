@@ -303,15 +303,22 @@ public class AdminServiceImpl implements AdminService {
 		}
        return null;
     }
-	
+	///////
 	@Override
-	public List<String> candidatesByParty(String partyName) {
-		List<PartyEntity> partyEntity=partyRepository.findByName(partyName);
-		PartyEntity party=partyEntity.get(0);
-		String id=party.getPartyid();
-		List<CandidateEntity> candidateList=candidateRepository.findByPartyid(id);
-		List<String> candidate=candidateList.stream().map(CandidateEntity::getName).collect(Collectors.toList());
-		return candidate;
+	public List<String> candidatesByParty(String partyName,String sessionid) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionid);
+		if(userCredentialsEntity != null) {
+			List<PartyEntity> partyEntity=partyRepository.findByName(partyName);
+			PartyEntity party=partyEntity.get(0);
+			String id=party.getPartyid();
+			List<CandidateEntity> candidateList=candidateRepository.findByPartyid(id);
+			List<String> candidate=candidateList.stream().map(CandidateEntity::getName).collect(Collectors.toList());
+			return candidate;
+		}
+		else {
+			return null;
+		}
+		
 	}
 
 
