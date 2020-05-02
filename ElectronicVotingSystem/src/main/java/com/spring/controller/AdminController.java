@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +19,14 @@ import com.spring.entity.ApplicationEntity;
 import com.spring.entity.CandidateEntity;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
+import com.spring.entity.ResultEntity;
 import com.spring.entity.UserCredentialsEntity;
-import com.spring.entity.UserEntity;
 import com.spring.json.Application;
 import com.spring.json.Candidate;
 import com.spring.json.Election;
 import com.spring.json.LoginResponse;
 import com.spring.json.Party;
+import com.spring.json.Result;
 import com.spring.json.UserCredentials;
 import com.spring.service.AdminService;
 
@@ -103,6 +105,29 @@ public class AdminController {
 	@GetMapping("/logout")
 	public LoginResponse logoutAdmin() {
 		return adminService.adminLogout(sessionId);
+	}
+	
+	@GetMapping(value="party/candidate/{name}")
+	public List<String> detailsByParty(@PathVariable(name="name") String partyName){
+		return adminService.candidatesByParty(partyName);	
+	}
+	
+	@PutMapping(value="/election/results/approval/{candidateId}",produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public Object resultStatus(@PathVariable(value="candidateId") String candidateid,@RequestBody Result result,ResultEntity resultEntity,@RequestHeader(name="sessionId") String sessionId) {
+        BeanUtils.copyProperties(result, resultEntity); 
+		return adminService.update(candidateid,resultEntity,sessionId);
+		
+	}
+	@DeleteMapping(value="election/delete/{electionid}")
+	public Boolean deleteElectionById(@PathVariable(value="electionid") String electionId,@RequestHeader(name="sessionId") String sessionid) {
+		return adminService.deletebyElectionId(electionId,sessionId);
+		
+	}
+	
+	@DeleteMapping(value="voter/delete/{candidateId}")
+	public Boolean deleteCandidateById(@PathVariable(value="candidateId") String candidateid,@RequestHeader(name="sessionId") String sessionid) {
+		return adminService.deletebyCandidateId(candidateid,sessionId);
+		
 	}
 
 }
