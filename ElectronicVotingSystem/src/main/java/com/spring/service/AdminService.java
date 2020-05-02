@@ -7,6 +7,7 @@ import com.spring.entity.ApplicationEntity;
 import com.spring.entity.CandidateEntity;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
+import com.spring.entity.ResultEntity;
 import com.spring.entity.UserEntity;
 import com.spring.json.LoginResponse;
 import com.spring.json.UserCredentials;
@@ -32,5 +33,13 @@ public interface AdminService {
 	Object updateRequest(ApplicationEntity applicationEntity,String sessionId, String userid);
 
 	List<ApplicationEntity> getRequest(String sessionId);
+	
+	List<String> candidatesByParty(String partyName);
+
+	Object update(String candidateid, ResultEntity result, String sessionId);
+
+	Boolean deletebyElectionId(String electionId, String sessionId);
+
+	Boolean deletebyCandidateId(String candidateid, String sessionId); 	
 
 }

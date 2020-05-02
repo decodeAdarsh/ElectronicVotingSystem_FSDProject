@@ -1,10 +1,10 @@
 package com.spring.impl;
 
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +14,19 @@ import com.spring.entity.ApplicationEntity;
 import com.spring.entity.CandidateEntity;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
+import com.spring.entity.ResultEntity;
 import com.spring.entity.UserCredentialsEntity;
-import com.spring.entity.UserEntity;
+
 
 import com.spring.json.LoginResponse;
+import com.spring.json.Result;
 import com.spring.json.UserCredentials;
 import com.spring.repository.AdminRepository;
 import com.spring.repository.ApplicationRepository;
 import com.spring.repository.CandidateRepository;
+import com.spring.repository.ElectionRepository;
 import com.spring.repository.PartyRepository;
+import com.spring.repository.ResultRepository;
 import com.spring.repository.UserCredentialsRepository;
 
 import com.spring.service.AdminService;
@@ -34,12 +38,19 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminRepository adminRepository;
 	
+	@Autowired
+	private ElectionRepository electionRepository;
+	
+	
 	
 	@Autowired
 	private ApplicationRepository applicationRepository;
 	
 	@Autowired
 	private PartyRepository partyRepository;
+	
+	@Autowired
+	private ResultRepository resultRepository;
 	
 	@Autowired
 	private CandidateRepository candidateRepository;
@@ -258,10 +269,10 @@ public class AdminServiceImpl implements AdminService {
 		
 		
 		if(userCredentialsEntity != null) {
-			ApplicationEntity app=applicationRepository.findByUserid(userid);
+			ApplicationEntity app=applicationRepository.findByUserId(userid);
 			if(app!=null) {
-		    app.setApprovedstatus(app.getApprovedstatus());
-		    app.setPassedstatus(app.getPassedstatus());
+		    app.setApprovedStatus(app.getApprovedStatus());
+		    app.setPassedStatus(app.getPassedStatus());
 		    app.setConstituency(app.getConstituency());
 		    applicationRepository.save(app);
 		    return app;
@@ -287,11 +298,78 @@ public class AdminServiceImpl implements AdminService {
 		if(userCredentialsEntity != null) {
 		
 	
-		return applicationRepository.findByApprovedstatus(0);
+		return applicationRepository.findByApprovedStatus(0);
 			
 		}
-return null;
-}
+       return null;
+    }
+	
+	@Override
+	public List<String> candidatesByParty(String partyName) {
+		List<PartyEntity> partyEntity=partyRepository.findByName(partyName);
+		PartyEntity party=partyEntity.get(0);
+		String id=party.getPartyid();
+		List<CandidateEntity> candidateList=candidateRepository.findByPartyid(id);
+		List<String> candidate=candidateList.stream().map(CandidateEntity::getName).collect(Collectors.toList());
+		return candidate;
+	}
+
+
+	@Override
+	public Object update(String candidateid, ResultEntity resultent, String sessionId) {
+		UserCredentialsEntity userCred=userCredentialsRepository.findBySessionId(sessionId);
+		Result result=new Result();
+		if(userCred!=null)
+		{
+			resultent=resultRepository.findByCandidateId(candidateid);
+			if(resultent!=null) {
+				resultent.setElectionId(result.getElectionId());
+				resultent.setCandidateId(result.getCandidateId());
+				resultent.setVoteCount(result.getVoteCount());
+				resultent.setResultStatus(result.getResultStatus());
+				resultent=resultRepository.save(resultent);
+				return resultent;
+			}
+			else
+				return "{\"result\": \"failure\",\"message\": \"Wrong candidate Id\"}";
+		}
+		else {
+			return "{\"result\": \"failure\",\"message\": \"Wrong Session Id\"}";
+		}
+	}
+
+
+	@Override
+	public Boolean deletebyElectionId(String electionId, String sessionId) {
+			
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+			List<ElectionEntity> elect=electionRepository.findByElectionid(electionId);
+			ElectionEntity el=elect.get(0);
+				electionRepository.delete(el);		
+	       	return true;
+		}
+			else {
+				return false;
+		}	
+	}
+
+
+	@Override
+	public Boolean deletebyCandidateId(String candidateid, String sessionId) {
+		UserCredentialsEntity userCredentialsEntity = userCredentialsRepository.findBySessionId(sessionId);
+		if(userCredentialsEntity != null) {
+			List<CandidateEntity> candy=candidateRepository.findByCandidateId(candidateid);
+			CandidateEntity can=candy.get(0);
+				candidateRepository.delete(can);		
+	       	return true;
+		}
+			else {
+				return false;
+		}	
+	}
+	
+
 }
 
 
