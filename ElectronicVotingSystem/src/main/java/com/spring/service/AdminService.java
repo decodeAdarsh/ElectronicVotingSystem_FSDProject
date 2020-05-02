@@ -8,7 +8,6 @@ import com.spring.entity.CandidateEntity;
 import com.spring.entity.ElectionEntity;
 import com.spring.entity.PartyEntity;
 import com.spring.entity.ResultEntity;
-import com.spring.entity.UserEntity;
 import com.spring.json.LoginResponse;
 import com.spring.json.UserCredentials;
 
