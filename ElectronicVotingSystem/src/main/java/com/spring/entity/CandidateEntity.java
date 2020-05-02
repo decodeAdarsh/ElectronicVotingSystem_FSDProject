@@ -33,7 +33,7 @@ public class CandidateEntity {
 		private LocalDate dateOfBirth;
 		
 		@Column(name = "mobileNo")
-		private String mobileNo;
+		private Long mobileNo;
 		
 		@Column(name = "address")
 		private String address;
@@ -46,7 +46,7 @@ public class CandidateEntity {
 		}
 
 		public CandidateEntity(String name, String electionid, String partyid, String district, String constituency,
-				LocalDate dateOfBirth, String mobileNo, String address, String emailId) {
+				LocalDate dateOfBirth, Long mobileNo, String address, String emailId) {
 			super();
 			this.name = name;
 			this.electionid = electionid;
@@ -59,8 +59,20 @@ public class CandidateEntity {
 			this.emailId = emailId;
 		}
 
+		public CandidateEntity(String name, String district, String constituency, LocalDate dateOfBirth,
+				Long mobileNo, String address, String emailId) {
+			super();
+			this.name = name;
+			this.district = district;
+			this.constituency = constituency;
+			this.dateOfBirth = dateOfBirth;
+			this.mobileNo = mobileNo;
+			this.address = address;
+			this.emailId = emailId;
+		}
+
 		public CandidateEntity(String candidateId, String name, String electionid, String partyid, String district,
-				String constituency, LocalDate dateOfBirth, String mobileNo, String address, String emailId) {
+				String constituency, LocalDate dateOfBirth, Long mobileNo, String address, String emailId) {
 			super();
 			this.candidateId = candidateId;
 			this.name = name;
@@ -130,11 +142,11 @@ public class CandidateEntity {
 			this.dateOfBirth = dateOfBirth;
 		}
 
-		public String getMobileNo() {
+		public Long getMobileNo() {
 			return mobileNo;
 		}
 
-		public void setMobileNo(String mobileNo) {
+		public void setMobileNo(Long mobileNo) {
 			this.mobileNo = mobileNo;
 		}
 
@@ -153,5 +165,14 @@ public class CandidateEntity {
 		public void setEmailId(String emailId) {
 			this.emailId = emailId;
 		}
+
+		@Override
+		public String toString() {
+			return "CandidateEntity [candidateId=" + candidateId + ", name=" + name + ", electionid=" + electionid
+					+ ", partyid=" + partyid + ", district=" + district + ", constituency=" + constituency
+					+ ", dateOfBirth=" + dateOfBirth + ", mobileNo=" + mobileNo + ", address=" + address + ", emailId="
+					+ emailId + "]";
+		}
+		
 
 }
