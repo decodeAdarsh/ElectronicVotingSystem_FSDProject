@@ -1,0 +1,18 @@
+spring:
+
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/evs?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
+        username: root
+        password: adi123
+
+    jpa:
+        generate-ddl: true
+        show-sql: true
+        
+        hibernate:
+            ddl-auto: update
+            dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+    port: 6666
